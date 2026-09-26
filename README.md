@@ -15,4 +15,4 @@ caelum build --target synth                 # generic gates + depth
 caelum build --target synth --mode ice40
 ```
 
-out in `build/<target>/<mode>/`: `stat.txt`, `netlist.json`, `netlist.v`, `yosys.log`. needs yosys (OSS CAD Suite).
+out in `build/<target>/<mode>/`: `summary.toml` (for `caelum report`), `stat.txt`, `netlist.json`, `netlist.v`, `yosys.log`. needs yosys (OSS CAD Suite).
