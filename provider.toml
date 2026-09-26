@@ -6,6 +6,7 @@ description = "Yosys synthesis: generic gates or a FPGA family (ice40, ecp5, gow
 modes = ["generic", "ice40", "ecp5", "gowin", "xilinx"]
 provides = ["netlist", "stat"]
 tools = ["yosys"]
+install = "OSS CAD Suite (github.com/YosysHQ/oss-cad-suite-build) or your distro's yosys"
 
 [step.build]
 commands = ["sh \"$CAELUM_PROVIDER_DIR/scripts/synth.sh\""]
