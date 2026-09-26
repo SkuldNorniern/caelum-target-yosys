@@ -1,0 +1,14 @@
+# Caelum target provider: Yosys. Open synthesis, cell and depth reports, netlists.
+
+[provider]
+name = "yosys"
+description = "Yosys synthesis: generic gates or a FPGA family (ice40, ecp5, gowin, xilinx)"
+modes = ["generic", "ice40", "ecp5", "gowin", "xilinx"]
+provides = ["netlist", "stat"]
+tools = ["yosys"]
+
+[step.build]
+commands = ["sh \"$CAELUM_PROVIDER_DIR/scripts/synth.sh\""]
+
+[step.clean]
+commands = ["rm -rf \"$CAELUM_OUT_DIR\""]
