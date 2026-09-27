@@ -13,6 +13,7 @@ provider = "yosys"
 ```bash
 caelum build --target synth                 # generic gates + depth
 caelum build --target synth --mode ice40
+caelum build --target us --mode xilinx     # with family = "xcup" in the target: URAM, UltraScale+ DSP/BRAM
 ```
 
 out in `build/<target>/<mode>/`: `summary.toml` (for `caelum report`), `stat.txt`, `netlist.json`, `netlist.v`, `yosys.log`. needs yosys (OSS CAD Suite).

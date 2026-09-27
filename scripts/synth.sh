@@ -1,7 +1,8 @@
 #!/bin/sh
 # caelum build --target <t> --mode generic|ice40|ecp5|gowin|xilinx
 # out: build/<t>/<mode>/netlist.json, netlist.v, stat.txt (cells), depth.txt (generic only)
-# target options: rtl  extra Verilog folder, relative to the project
+# target options: rtl     extra Verilog folder, relative to the project
+#                 family  xilinx mode: xc7 (default), xcup (UltraScale+, has URAM), xcu, xc7s ...
 set -eu
 
 die() { echo "yosys: $*" >&2; exit 1; }
@@ -26,7 +27,7 @@ case "$CAELUM_MODE" in
   ice40)   synth="synth_ice40 -top $top; tee -q -o $out/stat.txt stat" ;;
   ecp5)    synth="synth_ecp5 -top $top; tee -q -o $out/stat.txt stat" ;;
   gowin)   synth="synth_gowin -top $top; tee -q -o $out/stat.txt stat" ;;
-  xilinx)  synth="synth_xilinx -top $top -flatten; tee -q -o $out/stat.txt stat" ;;
+  xilinx)  synth="synth_xilinx -top $top -flatten -family ${CAELUM_OPT_FAMILY:-xc7}; tee -q -o $out/stat.txt stat" ;;
   *) die "unknown mode $CAELUM_MODE (generic, ice40, ecp5, gowin, xilinx)" ;;
 esac
 
@@ -54,7 +55,7 @@ awk -v mode="$CAELUM_MODE" -v depth="$depth" '
       if (c ~ /DFF|DLATCH/) k = "ff"; else k = ""
     } else if (mode == "xilinx") {
       if (c ~ /^LUT[1-6]$/) k = "lut"; else if (c ~ /^FD/) k = "ff"; else if (c ~ /^CARRY/) k = "carry"
-      else if (c ~ /^RAMB/) k = "bram"; else if (c ~ /^RAM(32|64|128|256)/) k = "lutram"
+      else if (c ~ /^RAMB/) k = "bram"; else if (c ~ /^URAM/) k = "uram"; else if (c ~ /^RAM(32|64|128|256)/) k = "lutram"
       else if (c ~ /^DSP48/) k = "dsp"; else if (c ~ /^(IBUF|OBUF|IOBUF|OBUFT)$/) k = "io"; else k = ""
     } else if (mode == "ice40") {
       if (c == "SB_LUT4") k = "lut"; else if (c ~ /^SB_DFF/) k = "ff"; else if (c == "SB_CARRY") k = "carry"
